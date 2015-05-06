@@ -4,8 +4,10 @@ import "fmt"
 
 type Item struct {
 	Id                 uint     `json:"item_id"`
+	App                *App     `json:"app"`
 	AppItemId          uint     `json:"app_item_id"`
 	FormattedAppItemId string   `json:"app_item_id_formatted"`
+	Link               string   `json:"link"`
 	Title              string   `json:"title"`
 	Files              []*File  `json:"files"`
 	Fields             []*Field `json:"fields"`

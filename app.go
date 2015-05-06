@@ -3,8 +3,10 @@ package podio
 import "fmt"
 
 type App struct {
-	Id   uint   `json:"app_id"`
-	Name string `json:"name"`
+	Id       uint   `json:"app_id"`
+	Name     string `json:"name"`
+	ItemName string `json:"item_name"`
+	SpaceId  uint   `json:"space_id"`
 }
 
 func (client *Client) GetApps(space_id uint) (apps []App, err error) {
