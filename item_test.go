@@ -12,7 +12,7 @@ func TestUnmarshalNestedItems(t *testing.T) {
 			"type": "app",
 			"values": [{
 				"value": {
-					"item_id": 42,
+					"item_id": 123456789,
 					"title": "nested item"
 				}
 			}]
@@ -34,7 +34,7 @@ func TestUnmarshalNestedItems(t *testing.T) {
 	// Try to decode Value as an Item and see what happens
 	value, ok := out.Values[0].Value.(Item)
 
-	if !ok || value.Id != 42 || value.Title != "nested item" {
-		t.Errorf("Didn't get nested item with id=42: %+v", out.Values[0].Value)
+	if !ok || value.Id != 123456789 || value.Title != "nested item" {
+		t.Errorf("Didn't get nested item with id=123456789: %+v", out.Values[0].Value)
 	}
 }

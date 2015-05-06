@@ -30,10 +30,10 @@ func AuthWithUserCredentials(clientId string, clientSecret string, username stri
 	return authRequest(data)
 }
 
-func AuthWithAppCredentials(clientId, clientSecret string, appId uint, appToken string) (*AuthToken, error) {
+func AuthWithAppCredentials(clientId, clientSecret string, appId float64, appToken string) (*AuthToken, error) {
 	data := url.Values{
 		"grant_type":    {"app"},
-		"app_id":        {fmt.Sprintf("%d", appId)},
+		"app_id":        {fmt.Sprintf("%.0f", appId)},
 		"app_token":     {appToken},
 		"client_id":     {clientId},
 		"client_secret": {clientSecret},

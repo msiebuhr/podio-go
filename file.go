@@ -9,10 +9,10 @@ import (
 )
 
 type File struct {
-	Id   uint   `json:"file_id"`
-	Name string `json:"name"`
-	Link string `json:"link"`
-	Size int    `json:"size"`
+	Id   float64 `json:"file_id"`
+	Name string  `json:"name"`
+	Link string  `json:"link"`
+	Size int     `json:"size"`
 }
 
 func (client *Client) GetFiles() (files []File, err error) {
@@ -20,8 +20,8 @@ func (client *Client) GetFiles() (files []File, err error) {
 	return
 }
 
-func (client *Client) GetFile(file_id uint) (file *File, err error) {
-	err = client.Request("GET", fmt.Sprintf("/file/%d", file_id), nil, nil, &file)
+func (client *Client) GetFile(file_id float64) (file *File, err error) {
+	err = client.Request("GET", fmt.Sprintf("/file/%.0f", file_id), nil, nil, &file)
 	return
 }
 
@@ -75,8 +75,8 @@ func (client *Client) CreateFile(name string, contents []byte) (file *File, err 
 	return
 }
 
-func (client *Client) ReplaceFile(oldFileId, newFileId uint) error {
-	path := fmt.Sprintf("/file/%d/replace", newFileId)
+func (client *Client) ReplaceFile(oldFileId, newFileId float64) error {
+	path := fmt.Sprintf("/file/%.0f/replace", newFileId)
 	params := map[string]interface{}{
 		"old_file_id": oldFileId,
 	}
@@ -84,8 +84,8 @@ func (client *Client) ReplaceFile(oldFileId, newFileId uint) error {
 	return client.RequestWithParams("POST", path, nil, params, nil)
 }
 
-func (client *Client) AttachFile(fileId uint, refType string, refId uint) error {
-	path := fmt.Sprintf("/file/%d/attach", fileId)
+func (client *Client) AttachFile(fileId float64, refType string, refId float64) error {
+	path := fmt.Sprintf("/file/%.0f/attach", fileId)
 	params := map[string]interface{}{
 		"ref_type": refType,
 		"ref_id":   refId,
@@ -94,7 +94,7 @@ func (client *Client) AttachFile(fileId uint, refType string, refId uint) error 
 	return client.RequestWithParams("POST", path, nil, params, nil)
 }
 
-func (client *Client) DeleteFile(fileId uint) error {
-	path := fmt.Sprintf("/file/%d", fileId)
+func (client *Client) DeleteFile(fileId float64) error {
+	path := fmt.Sprintf("/file/%.0f", fileId)
 	return client.Request("DELETE", path, nil, nil, nil)
 }
