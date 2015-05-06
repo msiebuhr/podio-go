@@ -1,6 +1,9 @@
 package podio
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type Item struct {
 	Id                 uint     `json:"item_id"`
@@ -19,6 +22,49 @@ type Field struct {
 	Type       string   `json:"type"`
 	Label      string   `json:"label"`
 	Values     []*Value `json:"values"`
+}
+
+func (f *Field) UnmarshalJSON(data []byte) error {
+	var fake struct {
+		FieldId    uint     `json:"field_id"`
+		ExternalId string   `json:"external_id"`
+		Type       string   `json:"type"`
+		Label      string   `json:"label"`
+		Values     []*Value `json:"values"`
+	}
+
+	// Unmarshal regularly
+	err := json.Unmarshal(data, &fake)
+	if err != nil {
+		return err
+	}
+
+	f.FieldId = fake.FieldId
+	f.ExternalId = fake.ExternalId
+	f.Type = fake.Type
+	f.Label = fake.Label
+	f.Values = fake.Values
+
+	// Does it have a 'type'-key, so we can deduce anything about the values?
+	switch f.Type {
+	case "app":
+		// Hack: Re-encode to JSON and decode as an App
+		for i, value := range f.Values {
+			reencodedValue, err := json.Marshal(value.Value)
+			if err != nil {
+				return err
+			}
+			var newItem Item
+			err = json.Unmarshal(reencodedValue, &newItem)
+			if err != nil {
+				return err
+			}
+			f.Values[i].Value = newItem
+		}
+	default:
+	}
+
+	return nil
 }
 
 type Value struct {
